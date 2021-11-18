@@ -42,11 +42,11 @@
     var car = "";
     car = getParameterByName('car');
     
-    if car != "" {
+    if (car != "") {
           alert("You're now controlling the "+car+" car.");
-          document.getElementById("car_id").textContent=car;
+          document.getElementById("car_id").textContent = car;
           pubnub.subscribe({
-              channels: [car+".controller"],
+              channels: [car + ".controller"],
           });
     } else {
 
