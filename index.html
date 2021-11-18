@@ -50,88 +50,88 @@
           });
     } else {
 
-    pubnub.hereNow(
-      {
-        channels: ["white.controller"]
-      },
-      function (status, response) {
-        if (response.totalOccupancy != 0) {
-          pubnub.hereNow(
-            {
-              channels: ["blue.controller"]
-            },
-            function (status, response) {
-              if (response.totalOccupancy != 0) {
-                pubnub.hereNow(
-                  {
-                    channels: ["red.controller"]
-                  },
-                  function (status, response) {
-                    if (response.totalOccupancy != 0) {
-                      pubnub.hereNow(
-                        {
-                          channels: ["clear.controller"]
-                        },
-                        function (status, response) {
-                          if (response.totalOccupancy != 0) {
-                            pubnub.hereNow(
-                              {
-                                channels: ["black.controller"]
-                              },
-                              function (status, response) {
-                                if (response.totalOccupancy != 0) {
-                                  alert("All cars are taken or offline. Please try again later.");
-                                  document.getElementById("car_id").textContent="All cars are taken. Please try again later.";
-                                } else {
-                                  alert("You're now controlling the black car.");
-                                  document.getElementById("car_id").textContent="Black";
-                                  car = "black";
-                                  pubnub.subscribe({
-                                      channels: ["black.controller"],
-                                  });
+      pubnub.hereNow(
+        {
+          channels: ["white.controller"]
+        },
+        function (status, response) {
+          if (response.totalOccupancy != 0) {
+            pubnub.hereNow(
+              {
+                channels: ["blue.controller"]
+              },
+              function (status, response) {
+                if (response.totalOccupancy != 0) {
+                  pubnub.hereNow(
+                    {
+                      channels: ["red.controller"]
+                    },
+                    function (status, response) {
+                      if (response.totalOccupancy != 0) {
+                        pubnub.hereNow(
+                          {
+                            channels: ["clear.controller"]
+                          },
+                          function (status, response) {
+                            if (response.totalOccupancy != 0) {
+                              pubnub.hereNow(
+                                {
+                                  channels: ["black.controller"]
+                                },
+                                function (status, response) {
+                                  if (response.totalOccupancy != 0) {
+                                    alert("All cars are taken or offline. Please try again later.");
+                                    document.getElementById("car_id").textContent="All cars are taken. Please try again later.";
+                                  } else {
+                                    alert("You're now controlling the black car.");
+                                    document.getElementById("car_id").textContent="Black";
+                                    car = "black";
+                                    pubnub.subscribe({
+                                        channels: ["black.controller"],
+                                    });
+                                  }
                                 }
-                              }
-                            );
-                          } else {
-                            alert("You're now controlling the clear car (the one with a tail).");
-                            document.getElementById("car_id").textContent="Clear";
-                            car = "clear";
-                            pubnub.subscribe({
-                                channels: ["clear.controller"],
-                            });
+                              );
+                            } else {
+                              alert("You're now controlling the clear car (the one with a tail).");
+                              document.getElementById("car_id").textContent="Clear";
+                              car = "clear";
+                              pubnub.subscribe({
+                                  channels: ["clear.controller"],
+                              });
+                            }
                           }
-                        }
-                      );
-                    } else {
-                      alert("You're now controlling the red car.");
-                      document.getElementById("car_id").textContent="Red";
-                      car = "red";
-                      pubnub.subscribe({
-                          channels: ["red.controller"],
-                      });
+                        );
+                      } else {
+                        alert("You're now controlling the red car.");
+                        document.getElementById("car_id").textContent="Red";
+                        car = "red";
+                        pubnub.subscribe({
+                            channels: ["red.controller"],
+                        });
+                      }
                     }
-                  }
-                );
-              } else {
-                alert("You're now controlling the blue car.");
-                document.getElementById("car_id").textContent="Blue";
-                car = "blue";
-                pubnub.subscribe({
-                    channels: ["blue.controller"],
-                });
+                  );
+                } else {
+                  alert("You're now controlling the blue car.");
+                  document.getElementById("car_id").textContent="Blue";
+                  car = "blue";
+                  pubnub.subscribe({
+                      channels: ["blue.controller"],
+                  });
+                }
               }
-            }
-          );
-        } else {
-          alert("You're now controlling the white car.");
-          document.getElementById("car_id").textContent="White";
-          car = "white";
-          pubnub.subscribe({
-              channels: ["white.controller"],
-          });
+            );
+          } else {
+            alert("You're now controlling the white car.");
+            document.getElementById("car_id").textContent="White";
+            car = "white";
+            pubnub.subscribe({
+                channels: ["white.controller"],
+            });
+          }
         }
-      }
-    );
+      );
     }
 
     function moveforward() {
@@ -186,11 +186,9 @@
     })
 
   </script>
-  
   <button onclick="moveforward()">FORWARD</button>
   <button onclick="moveback()">BACK</button>
   <button onclick="moveleft()">LEFT</button>
   <button onclick="moveright()">RIGHT</button> 
 </body>
-
 </html>
