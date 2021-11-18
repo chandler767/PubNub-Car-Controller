@@ -40,6 +40,15 @@
       });
 
     var car = "";
+    car = getParameterByName('car');
+    
+    if car != "" {
+          alert("You're now controlling the "+car+" car.");
+          document.getElementById("car_id").textContent=car;
+          pubnub.subscribe({
+              channels: [car+".controller"],
+          });
+    } else {
 
     pubnub.hereNow(
       {
@@ -123,6 +132,7 @@
         }
       }
     );
+    }
 
     function moveforward() {
       try {
