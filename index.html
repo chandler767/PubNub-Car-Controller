@@ -33,6 +33,17 @@
   <script src="js/main.js"></script>
 
   <script>
+	function getParameterByName( name ){
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
     pubnub = new PubNub({
         publishKey : "pub-c-3d763d32-851e-43d8-8be7-5cd16c83ec05",
         subscribeKey : "sub-c-0d3b50e8-423f-11ec-96b3-4a48f5067549",
