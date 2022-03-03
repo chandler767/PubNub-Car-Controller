@@ -1,0 +1,216 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+  <meta charset="utf-8">
+  <title>Car Controller</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <meta name="theme-color" content="#fafafa">
+
+  <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.33.1.js"></script>
+
+</head>
+
+<body>
+
+  <!-- Add your site or application content here -->
+  <p>Car ID:</p>
+  <p id="car_id"></p>
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+	function getParameterByName( name ){
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+    pubnub = new PubNub({
+        publishKey : "pub-c-3d763d32-851e-43d8-8be7-5cd16c83ec05",
+        subscribeKey : "sub-c-0d3b50e8-423f-11ec-96b3-4a48f5067549",
+      });
+
+    var car = "";
+    car = getParameterByName('car');
+    
+    if (car != "") {
+          alert("You're now controlling the "+car+" car.");
+          document.getElementById("car_id").textContent = car;
+          pubnub.subscribe({
+              channels: [car + ".controller"],
+          });
+    } else {
+
+      pubnub.hereNow(
+        {
+          channels: ["white.controller"]
+        },
+        function (status, response) {
+          if (response.totalOccupancy != 0) {
+            pubnub.hereNow(
+              {
+                channels: ["blue.controller"]
+              },
+              function (status, response) {
+                if (response.totalOccupancy != 0) {
+                  pubnub.hereNow(
+                    {
+                      channels: ["red.controller"]
+                    },
+                    function (status, response) {
+                      if (response.totalOccupancy != 0) {
+                        pubnub.hereNow(
+                          {
+                            channels: ["clear.controller"]
+                          },
+                          function (status, response) {
+                            if (response.totalOccupancy != 0) {
+                              pubnub.hereNow(
+                                {
+                                  channels: ["black.controller"]
+                                },
+                                function (status, response) {
+                                  if (response.totalOccupancy != 0) {
+                                    alert("All cars are taken or offline. Please try again later.");
+                                    document.getElementById("car_id").textContent="All cars are taken. Please try again later.";
+                                  } else {
+                                    alert("You're now controlling the black car.");
+                                    document.getElementById("car_id").textContent="Black";
+                                    car = "black";
+                                    pubnub.subscribe({
+                                        channels: ["black.controller"],
+                                    });
+                                  }
+                                }
+                              );
+                            } else {
+                              alert("You're now controlling the clear car (the one with a tail).");
+                              document.getElementById("car_id").textContent="Clear";
+                              car = "clear";
+                              pubnub.subscribe({
+                                  channels: ["clear.controller"],
+                              });
+                            }
+                          }
+                        );
+                      } else {
+                        alert("You're now controlling the red car.");
+                        document.getElementById("car_id").textContent="Red";
+                        car = "red";
+                        pubnub.subscribe({
+                            channels: ["red.controller"],
+                        });
+                      }
+                    }
+                  );
+                } else {
+                  alert("You're now controlling the blue car.");
+                  document.getElementById("car_id").textContent="Blue";
+                  car = "blue";
+                  pubnub.subscribe({
+                      channels: ["blue.controller"],
+                  });
+                }
+              }
+            );
+          } else {
+            alert("You're now controlling the white car.");
+            document.getElementById("car_id").textContent="White";
+            car = "white";
+            pubnub.subscribe({
+                channels: ["white.controller"],
+            });
+          }
+        }
+      );
+    }
+
+    function moveforward() {
+      try {
+          const result = pubnub.publish({
+              message: "forward",
+              channel: car,
+          });
+      } catch (status) {
+          console.log(status);
+      }    
+    }
+    
+    function moveback() {
+      try {
+          const result = pubnub.publish({
+              message: "back",
+              channel: car,
+          });
+      } catch (status) {
+          console.log(status);
+      }  
+    }
+    
+    function moveleft() {
+      try {
+          const result = pubnub.publish({
+              message: "left",
+              channel: car,
+          });
+      } catch (status) {
+          console.log(status);
+      }  
+    }
+    
+    function moveright() {
+      try {
+          const result = pubnub.publish({
+              message: "right",
+              channel: car,
+          });
+      } catch (status) {
+          console.log(status);
+      }  
+    }
+    
+    function cheese() {
+      try {
+          const result = pubnub.publish({
+              message: "cheese",
+              channel: car,
+          });
+      } catch (status) {
+          console.log(status);
+      }  
+    }
+
+    $('.no-zoom').bind('touchend', function(e) {
+      e.preventDefault();
+      // Add your code here. 
+      $(this).click();
+      // This line still calls the standard click event, in case the user needs to interact with the element that is being clicked on, but still avoids zooming in cases of double clicking.
+    })
+
+  </script>
+  <button onclick="cheese()">CHEESE</button> <br>
+  <button onclick="moveforward()">FORWARD</button>
+  <button onclick="moveback()">BACK</button>
+  <button onclick="moveleft()">LEFT</button>
+  <button onclick="moveright()">RIGHT</button> 
+</body>
+</html>
